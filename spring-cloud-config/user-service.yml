@@ -1,0 +1,16 @@
+spring:  
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: '{cipher}a01f4a284dea35e4268dcbf38f8d3a0f947b76289f27010015a5986af0c30e93'
+
+token:
+  expiration_time: 86400000
+  secret: user_token
+
+gateway:
+  ip: 172.18.0.5
+
+order_service:
+  url: http://ORDER-SERVICE/%s/orders
