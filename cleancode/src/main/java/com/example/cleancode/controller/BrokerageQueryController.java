@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @author backtony
+ *
+ * 중개수수료가 얼마인지 조회하는 컨트롤러
+ */
+
 @RestController
 public class BrokerageQueryController {
-    // 중개 수수료 가격 반환
-    // 매매인지, 임대차인지 타입을 받는다.
-
     @GetMapping("/api/calc/brokerage")
     public Long calcBrokerage(@RequestParam ActionType actionType,
                               @RequestParam Long price){
