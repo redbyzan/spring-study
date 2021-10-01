@@ -4,7 +4,7 @@ package com.example.cleancode.policy;
  * 매매일 때 중개수수료를 계산해주는 클래스
  */
 
-public class RentBrokeragePolicy implements BrokerPolicy{
+public class RentBrokeragePolicy implements BrokeragePolicy {
 
 
     public BrokerageRule createRule(Long price){

@@ -1,6 +1,6 @@
 package com.example.cleancode.policy;
 
-public interface BrokerPolicy {
+public interface BrokeragePolicy {
 
     default Long calculate(Long price){
         BrokerageRule rule = createRule(price);

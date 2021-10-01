@@ -4,7 +4,7 @@ import com.example.cleancode.constants.ActionType;
 
 public class BrokeragePolicyFactory {
 
-    public static BrokerPolicy of(ActionType actionType){
+    public static BrokeragePolicy of(ActionType actionType){
         switch (actionType){
             case RENT:
                 return new RentBrokeragePolicy();
