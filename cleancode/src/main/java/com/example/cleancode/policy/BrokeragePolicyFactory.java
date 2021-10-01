@@ -1,6 +1,8 @@
 package com.example.cleancode.policy;
 
 import com.example.cleancode.constants.ActionType;
+import com.example.cleancode.exception.ErrorCode;
+import com.example.cleancode.exception.HouseUtilsException;
 
 public class BrokeragePolicyFactory {
 
@@ -11,7 +13,7 @@ public class BrokeragePolicyFactory {
             case PURCHASE:
                 return new PurchaseBrokeragePolicy();
             default:
-                throw new IllegalArgumentException("해당 actionType에 대한 정책이 존재하지 않습니다.");
+                throw new HouseUtilsException(ErrorCode.INVALID_REQUEST, "해당 actionType에 대한 정책이 존재하지 않습니다.");
         }
     }
 }
