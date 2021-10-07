@@ -1,6 +1,6 @@
 ## 소개
-SW 마에스트로 프로젝트에서 사용한 JWT 토큰을 Redis에 넣는 초창기 연습 코드    
-정말 처음 공부할 때 기록한 코드로 실제 프로젝트 코드를 참고하는게 좋을 듯함  
+SW Maestro 프로젝트를 진행하면서 적용했던 AWS RDS로 MySQL Replication 적용하기 (feat. 다중 AZ) 코드
 
-
+## 관련 포스팅 주소
+<a href="https://backtony.github.io/spring/mysql/aws/2021-09-28-spring-mysql-1/" target="_blank">Spring - AWS RDS로 MySQL Replication 적용하기 (feat. 다중 AZ)</a>
 

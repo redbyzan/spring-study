@@ -4,3 +4,6 @@ SW Maestro 프로젝트를 진행하면서 Spring & Jenkins & & Docker & DockerH
 ## 관련 포스팅 주소
 <a href="https://backtony.github.io/spring/aws/2021-08-08-spring-cicd-1/" target="_blank">Spring & Jenkins & Docker & DockerHub & GitHub 활용한 CI/CD</a>
 
+## 더욱 심화해서 적용 시킨 포스팅
+<a href="https://backtony.github.io/spring/aws/2021-08-22-spring-cicd-2/" target="_blank">Spring & TravisCI & CodeDeploy & Nginx 활용한 CI/CD</a>  
+<a href="https://backtony.github.io/spring/aws/2021-08-28-spring-cicd-3/" target="_blank">VPC, AutoScaling, Load Balancer, CodeDeploy Blue/Green, S3, CloudWatch, RDS, Jenkins, Spring, Docker를 활용한 CI/CD 구축하기</a>  
