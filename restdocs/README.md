@@ -1,16 +1,3 @@
----
-layout: post
-title:  Spring REST Docs 적용 및 최적화 하기
-subtitle:  Spring REST Docs 적용 및 최적화 하기
-categories: spring
-tags: spring-test
-comments: true
-image: /assets/img/post/icon/restdocs.PNG
-hide_image: true
----
-*
-{:toc}
-
 ## 1. REST Docs 란?
 ---
 + 테스트 코드 기반으로 Restful API 문서를 돕는 도구입니다.
@@ -272,7 +259,7 @@ operation::member-get[snippets='http-request,path-parameters,http-response,respo
 + include::{snippets}/member-get/XXX.adoc[]
     - opertaion의 경우 한번에 원하는 조각들을 넣을 수 있었는데 include는 특정 adoc을 지정하여 넣을 수 있습니다.
 
-추가적으로 다른 Asciidoc 사용법은 [[링크](https://narusas.github.io/2018/03/21/Asciidoc-basic.html){: target="_blank"}]를 참고하시면 도움이 될 것 같습니다.
+추가적으로 다른 Asciidoc 사용법은 [[링크](https://narusas.github.io/2018/03/21/Asciidoc-basic.html)]를 참고하시면 도움이 될 것 같습니다.
 
 <br>
 
@@ -307,7 +294,7 @@ src/docs/asciidoc 위치로 해당 API를 빼주게 됩니다.
 
 ![그림10](https://backtony.github.io/assets/img/post/spring/test/3-10.PNG)  
 커스텀하기 위해서는 src/test/resources/org/springframework/restdocs/templates 경로에 커스텀한 snippets을 만들어주면 됩니다.  
-템플릿 코드는 블로그에 작성했더니 깨지는 현상이 발생하여 [[깃허브](https://github.com/backtony/spring-study/tree/master/restdocs/src/test/resources/org/springframework/restdocs/templates){: target="_blank"}]를 참고해주시면 좋을 것 같습니다.  
+템플릿 코드는 블로그에 작성했더니 깨지는 현상이 발생하여 [[깃허브](https://github.com/backtony/spring-study/tree/master/restdocs/src/test/resources/org/springframework/restdocs/templates)]를 참고해주시면 좋을 것 같습니다.  
 snippet은 mustache 문법을 사용합니다.  
 snippet 코드를 보시면 name과 path가 보입니다. test에서 문서 작성시 parameterWithName, fieldWithPath 등을 사용하게 되는데 여기서의 name, path 가 위에서 {{}}안에 값입니다.  
 request-field.snippet에는 직접 커스텀한 constraints를 추가해주었습니다. 이는 추후 테스트 코드에서 사용합니다.
@@ -555,7 +542,7 @@ public class Member {
 패키지 구조는 위와 같습니다.  
 test 디렉토리에 document 패키지를 만들었고 이 안에 Enum를 작성하기 위한 클래스들로 구성했습니다.  
 resources에는 custom-response-fields.snippet을 추가했습니다.  
-템플릿 코드는 [[여기](https://github.com/backtony/spring-study/blob/master/restdocs/src/test/resources/org/springframework/restdocs/templates/custom-response-fields.snippet){: target="_blank"}]에서 확인하시면 됩니다.  
+템플릿 코드는 [[여기](https://github.com/backtony/spring-study/blob/master/restdocs/src/test/resources/org/springframework/restdocs/templates/custom-response-fields.snippet)]에서 확인하시면 됩니다.  
 템플릿을 따로 만드는 이유는 간단합니다. 기존에 앞서 만들어준 response-fields.snippet이 default로 사용되는데 enum값은 단지 필드명과 설명만 담아주는 문서를 작성하면 되는데 default로 사용되는 템플릿을 사용하면 불필요한 컬럼들이 생기게 되기 때문입니다.
 <br><br>
 
@@ -947,7 +934,7 @@ class MemberControllerTest extends RestDocsTestSupport {
 
 ### 공통 코드 문서화
 이제 마지막으로 HTTP Error Response, HTTP status codes, Host 환경 같은 내용을 문서화해보겠습니다.  
-우선 프로젝트 안에 에러를 처리하는 GlobalExceptionHandler을 만들어서 에러를 잘 반환하도록 코딩해야합니다. 이와 관련된 내용은 포스팅의 주제와는 다르기 때문에 [[깃허브](https://github.com/backtony/spring-study/tree/master/restdocs/src/main/java/com/example/restdocs/error){: target="_blank"}] 코드를 확인하시길 바랍니다.  
+우선 프로젝트 안에 에러를 처리하는 GlobalExceptionHandler을 만들어서 에러를 잘 반환하도록 코딩해야합니다. 이와 관련된 내용은 포스팅의 주제와는 다르기 때문에 [[깃허브](https://github.com/backtony/spring-study/tree/master/restdocs/src/main/java/com/example/restdocs/error)] 코드를 확인하시길 바랍니다.  
 에러 관련 문서화 내용이 필요하므로 테스트 패키지에서 에러를 발생시키는 컨트롤러를 만들어주고 테스트를 작성합니다.
 
 __CommonDocController.java__
@@ -1100,7 +1087,7 @@ include::Member-API.adoc[]
 <br><Br><br>
 
 
-[[https://techblog.woowahan.com/2678/](https://techblog.woowahan.com/2678/){: target="_blank"}]
-[[https://techblog.woowahan.com/2597/](https://techblog.woowahan.com/2597/){: target="_blank"}]  
-[[https://docs.spring.io/spring-restdocs/docs/current/reference/html5/](https://docs.spring.io/spring-restdocs/docs/current/reference/html5/){: target="_blank"}]  
-{:.note title="참고"}
+__참고 자료__  
+[[https://techblog.woowahan.com/2678/](https://techblog.woowahan.com/2678/)]  
+[[https://techblog.woowahan.com/2597/](https://techblog.woowahan.com/2597/)]  
+[[https://docs.spring.io/spring-restdocs/docs/current/reference/html5/](https://docs.spring.io/spring-restdocs/docs/current/reference/html5/)]  
