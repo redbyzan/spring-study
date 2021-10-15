@@ -81,7 +81,7 @@ class MemberControllerTest extends RestDocsTestSupport {
                                 requestFields(
                                         fieldWithPath("age").description("age").attributes(field("constraints", "길이 10 이하")),
                                         fieldWithPath("email").description("email").attributes(field("constraints", "길이 30 이하")),
-                                        fieldWithPath("status").description("Code Member Status 참조")
+                                        fieldWithPath("status").description("link:common/status.html[상태 코드,role=\"popup\"]")
                                 )
                         )
                 )

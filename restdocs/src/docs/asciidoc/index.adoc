@@ -6,11 +6,11 @@ backtony.github.io(부제)
 :toc: left
 :toclevels: 2
 :sectlinks:
-
+:docinfo: shared-head
 
 include::Member-API.adoc[]
 
-include::code.adoc[]
+
 
 
 

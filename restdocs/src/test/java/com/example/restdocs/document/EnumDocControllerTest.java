@@ -39,7 +39,7 @@ class EnumDocControllerTest extends RestDocsTestSupport {
         EnumDocs enumDocs = getData(mvcResult);
 
         result.andExpect(status().isOk())
-                .andDo(MockMvcRestDocumentation.document("common",
+                .andDo(restDocs.document(
                         customResponseFields("custom-response", beneathPath("data.memberStatus").withSubsectionId("memberStatus"), // (2)
                                 attributes(key("title").value("memberStatus")),
                                 enumConvertFieldDescriptor((enumDocs.getMemberStatus()))
@@ -49,12 +49,25 @@ class EnumDocControllerTest extends RestDocsTestSupport {
                                 enumConvertFieldDescriptor((enumDocs.getSex()))
                         )
                 ));
+
+//        result.andExpect(status().isOk())
+//                .andDo(MockMvcRestDocumentation.document("common",
+//                        customResponseFields("custom-response", beneathPath("data.memberStatus").withSubsectionId("memberStatus"), // (2)
+//                                attributes(key("title").value("memberStatus")),
+//                                enumConvertFieldDescriptor((enumDocs.getMemberStatus()))
+//                        ),
+//                        customResponseFields("custom-response", beneathPath("data.sex").withSubsectionId("sex"), // (2)
+//                                attributes(key("title").value("sex")),
+//                                enumConvertFieldDescriptor((enumDocs.getSex()))
+//                        )
+//                ));
     }
 
     // 커스텀 템플릿 사용을 위한 함수
-    public static CustomResponseFieldsSnippet customResponseFields(String type,
-                                                                   PayloadSubsectionExtractor<?> subsectionExtractor,
-                                                                   Map<String, Object> attributes, FieldDescriptor... descriptors) {
+    public static CustomResponseFieldsSnippet customResponseFields
+                                (String type,
+                                 PayloadSubsectionExtractor<?> subsectionExtractor,
+                                 Map<String, Object> attributes, FieldDescriptor... descriptors) {
         return new CustomResponseFieldsSnippet(type, subsectionExtractor, Arrays.asList(descriptors), attributes
                 , true);
     }
@@ -68,10 +81,10 @@ class EnumDocControllerTest extends RestDocsTestSupport {
 
     // mvc result 데이터 파싱
     private EnumDocs getData(MvcResult result) throws IOException {
-        ApiResponseDto<EnumDocs> apiResponseDto = objectMapper.readValue(result.getResponse().getContentAsByteArray(),
-                new TypeReference<ApiResponseDto<EnumDocs>>() {
-                });
-
+        ApiResponseDto<EnumDocs> apiResponseDto = objectMapper
+                                                .readValue(result.getResponse().getContentAsByteArray(),
+                                                new TypeReference<ApiResponseDto<EnumDocs>>() {}
+                                                );
         return apiResponseDto.getData();
     }
 }
