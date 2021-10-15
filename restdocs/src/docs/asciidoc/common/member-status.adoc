@@ -2,4 +2,4 @@
 :icons: font
 
 [[member-status]]
-include::{snippets}/common-doc-controller-test/commons/custom-response-fields-memberStatus.adoc[]
+include::{snippets}/common-doc-controller-test/enums/custom-response-fields-memberStatus.adoc[]

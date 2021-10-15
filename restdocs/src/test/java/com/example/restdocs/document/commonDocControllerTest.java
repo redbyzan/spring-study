@@ -54,7 +54,7 @@ class CommonDocControllerTest extends RestDocsTestSupport {
     }
 
     @Test
-    public void commons() throws Exception {
+    public void enums() throws Exception {
         ResultActions result = this.mockMvc.perform(
                 get("/test/enums")
                         .contentType(MediaType.APPLICATION_JSON)
