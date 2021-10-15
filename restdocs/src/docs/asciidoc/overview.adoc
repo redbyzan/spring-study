@@ -7,33 +7,38 @@
 |===
 | 환경 | Host
 
-| Sandbox
-| `https://sandbox-xxx-service.com`
-
 | Beta
-| `https://beta-xxx-service.com`
+| `beta-backtony.github.io`
 
 | Production
-| `https://xxx-service.com`
+| `backtony.github.io`
 |===
 
 [[overview-http-status-codes]]
 === HTTP status codes
 
 |===
-| Status code | Usage
+| 상태 코드 | 설명
 
 | `200 OK`
-| successfully
+| 성공
 
 | `400 Bad Request`
-| Bad Request
+| 잘못된 요청
+
+| `401 Unauthorized`
+| 비인증 상태
+
+| `403 Forbidden`
+| 권한 거부
+
+| `404 Not Found`
+| 존재하지 않는 요청 리소스
 
 | `500 Internal Server Error`
-| Server Error
+| 서버 에러
 |===
 
 [[overview-error-response]]
 === HTTP Error Response
-
-operation::rest-document/sample-request[snippets='http-response,response-fields']
+operation::enum-doc-controller-test/sample-request[snippets='http-response,response-fields']

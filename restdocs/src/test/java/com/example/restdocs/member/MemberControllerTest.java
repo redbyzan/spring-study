@@ -1,5 +1,6 @@
 package com.example.restdocs.member;
 
+import com.example.restdocs.document.utils.DocumentLinkGenerator;
 import com.example.restdocs.document.utils.RestDocsTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -81,7 +82,7 @@ class MemberControllerTest extends RestDocsTestSupport {
                                 requestFields(
                                         fieldWithPath("age").description("age").attributes(field("constraints", "길이 10 이하")),
                                         fieldWithPath("email").description("email").attributes(field("constraints", "길이 30 이하")),
-                                        fieldWithPath("status").description("link:common/member-status.html[상태 코드,role=\"popup\"]")
+                                        fieldWithPath("status").description(DocumentLinkGenerator.generateLinkCode(DocumentLinkGenerator.DocUrl.MEMBER_STATUS))
                                 )
                         )
                 )
@@ -112,6 +113,5 @@ class MemberControllerTest extends RestDocsTestSupport {
                 )
         ;
     }
-
 
 }

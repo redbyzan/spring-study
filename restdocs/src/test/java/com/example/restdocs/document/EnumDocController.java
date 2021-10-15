@@ -3,8 +3,15 @@ package com.example.restdocs.document;
 import com.example.restdocs.EnumType;
 import com.example.restdocs.member.MemberStatus;
 import com.example.restdocs.member.Sex;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,6 +19,23 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/test")
 public class EnumDocController {
+
+    @PostMapping("/error")
+    public void sample(@RequestBody @Valid SampleRequest dto) {
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SampleRequest {
+
+        @NotEmpty
+        private String name;
+
+        @Email
+        private String email;
+    }
 
 
     @GetMapping("/docs")
