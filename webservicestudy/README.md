@@ -853,8 +853,3 @@ Validator의 구현체를 만들어 작성하고 컨트롤러에서 @InitBinder(
 
 
 
-
-<br>
-
----
-__본 포스팅은 인프런 백기선님의 '스프링과 JPA 기반 웹 애플리케이션 개발' 강의를 듣고 정리한 내용을 바탕으로 복습을 위해 작성하였습니다. [[강의 링크](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-JPA-%EC%9B%B9%EC%95%B1#){:target="_blank"}]__
