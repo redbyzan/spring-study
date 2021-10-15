@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-class commonDocControllerTest extends RestDocsTestSupport {
+class CommonDocControllerTest extends RestDocsTestSupport {
 
     @Test
     public void errorSample() throws Exception {
