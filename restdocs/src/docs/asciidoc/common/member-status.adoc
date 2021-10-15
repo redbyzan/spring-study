@@ -1,5 +1,5 @@
 :doctype: book
 :icons: font
 
-[[status]]
+[[member-status]]
 include::{snippets}/enum-doc-controller-test/commons/custom-response-fields-memberStatus.adoc[]
