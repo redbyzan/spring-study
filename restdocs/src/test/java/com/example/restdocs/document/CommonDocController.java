@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/test")
-public class EnumDocController {
+public class CommonDocController {
 
     @PostMapping("/error")
-    public void sample(@RequestBody @Valid SampleRequest dto) {
+    public void errorSample(@RequestBody @Valid SampleRequest dto) {
     }
 
     @Getter
@@ -38,8 +38,8 @@ public class EnumDocController {
     }
 
 
-    @GetMapping("/docs")
-    public ApiResponseDto<EnumDocs> findAll() {
+    @GetMapping("/enums")
+    public ApiResponseDto<EnumDocs> findEnums() {
 
         // 문서화 하고 싶은 -> EnumDocs 클래스에 담긴 모든 Enum 값 생성
         Map<String, String> memberStatus = getDocs(MemberStatus.values());
@@ -56,7 +56,7 @@ public class EnumDocController {
 
     private Map<String, String> getDocs(EnumType[] enumTypes) {
         return Arrays.stream(enumTypes)
-                .collect(Collectors.toMap(EnumType::getId, EnumType::getText));
+                .collect(Collectors.toMap(EnumType::getName, EnumType::getDescription));
     }
 
 }

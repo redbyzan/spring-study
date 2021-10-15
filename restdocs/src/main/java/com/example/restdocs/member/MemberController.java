@@ -21,6 +21,7 @@ public class MemberController {
 
     @GetMapping("/{id}")
     public MemberResponse getMember(@PathVariable Long id){
+
         return new MemberResponse(memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Not Found")));
     }

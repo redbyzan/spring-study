@@ -5,15 +5,11 @@ import com.example.restdocs.document.utils.RestDocsTestSupport;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadSubsectionExtractor;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
@@ -29,11 +25,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-class EnumDocControllerTest extends RestDocsTestSupport {
+class commonDocControllerTest extends RestDocsTestSupport {
 
     @Test
-    public void sampleRequest() throws Exception {
-        EnumDocController.SampleRequest sampleRequest = new EnumDocController.SampleRequest("name","hhh.naver");
+    public void errorSample() throws Exception {
+        CommonDocController.SampleRequest sampleRequest = new CommonDocController.SampleRequest("name","hhh.naver");
         mockMvc.perform(
                 post("/test/error")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -60,7 +56,7 @@ class EnumDocControllerTest extends RestDocsTestSupport {
     @Test
     public void commons() throws Exception {
         ResultActions result = this.mockMvc.perform(
-                get("/test/docs")
+                get("/test/enums")
                         .contentType(MediaType.APPLICATION_JSON)
         );
 

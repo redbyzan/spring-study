@@ -15,12 +15,12 @@ public enum Sex implements EnumType {
     private String description;
 
     @Override
-    public String getId() {
-        return this.name();
+    public String getDescription() {
+        return this.description;
     }
 
     @Override
-    public String getText() {
-        return this.description;
+    public String getName() {
+        return this.name();
     }
 }
