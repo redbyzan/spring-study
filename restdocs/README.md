@@ -1,3 +1,4 @@
+
 ## 1. REST Docs 란?
 ---
 + 테스트 코드 기반으로 Restful API 문서를 돕는 도구입니다.
@@ -107,7 +108,7 @@ asciidoctor { // asciidoctor 작업 구성
     dependsOn test // test 작업 이후에 작동하도록 하는 설정
     configurations 'asciidoctorExtensions' // 위에서 작성한 configuration 적용
     inputs.dir snippetsDir // snippetsDir 를 입력으로 구성
-    // HTML로 만든 adoc 파일을 지정
+    // HTML로 만들고자 하는 adoc 파일 지정
     sources{
         include("**/index.adoc","**/common/*.adoc")
     }    
@@ -227,7 +228,7 @@ class MemberControllerTest  {
 
 ![그림3](https://backtony.github.io/assets/img/post/spring/test/3-3.PNG)  
 테스트로 만들어준 조각파일들을 이용해서 문서를 만들 차례입니다.  
-main/resources/static/docs 디렉토리를 만들어줍니다. 앞서 gradle 설정에 의해 이곳으로 html 파일이 복사되어 옮겨집니다.  
+그 전에 우선 main/resources/static/docs 디렉토리를 만들어줍니다. 앞서 gradle 설정에 의해 이곳으로 html 파일이 복사되어 이곳으로 옮겨집니다.  
 그리고 src/docs/asciidoc 디렉토리를 만들고 안에 index.adoc 파일을 만들어줍니다.
 ```js
 = REST Docs 문서 만들기 (글의 제목)
@@ -296,7 +297,7 @@ src/docs/asciidoc 위치로 해당 API를 빼주게 됩니다.
 커스텀하기 위해서는 src/test/resources/org/springframework/restdocs/templates 경로에 커스텀한 snippets을 만들어주면 됩니다.  
 템플릿 코드는 블로그에 작성했더니 깨지는 현상이 발생하여 [[깃허브](https://github.com/backtony/spring-study/tree/master/restdocs/src/test/resources/org/springframework/restdocs/templates)]를 참고해주시면 좋을 것 같습니다.  
 snippet은 mustache 문법을 사용합니다.  
-snippet 코드를 보시면 name과 path가 보입니다. test에서 문서 작성시 parameterWithName, fieldWithPath 등을 사용하게 되는데 여기서의 name, path 가 위에서 {{}}안에 값입니다.  
+snippet 코드를 보시면 name과 path가 보입니다. test에서 문서 작성시 parameterWithName, fieldWithPath 등을 사용하게 되는데 여기서의 name, path 가 위에서 \{\{\}\}안에 값입니다.  
 request-field.snippet에는 직접 커스텀한 constraints를 추가해주었습니다. 이는 추후 테스트 코드에서 사용합니다.
 <Br><Br>
 
@@ -385,6 +386,22 @@ public class RestDocsTestSupport {
     - 따라서 자동 주입이 아니라 필요한 것들을 가져와서 주입하기 위해 사용하는 코드입니다.
 + @Import(RestDocsConfig.class)
     - 앞서 작성한 Config를 추가해주는 코드입니다.
++ @SpringBootTest + @AutoConfigureMockMvc는 편리하긴 하지만 무겁습니다. 위의 코드에서는 이대로 사용했지만 저는 실제로는 아래와 같이 사용했습니다.
+
+```java
+@WebMvcTest(
+        value = {CommonDocController.class, GlobalControllerAdvice.class},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+        }
+)
+@ExtendWith(RestDocumentationExtension.class)
+@Import(RestDocsConfig.class)
+public class RestDocsTestSupport {
+    ...
+}
+```
+필요한 컨트롤러들을 WebMvcTest에 차례로 추가해주면 됩니다.
 
 <br>
 
@@ -727,14 +744,14 @@ class CommonDocControllerTest extends RestDocsTestSupport {
 
 ![그림15](https://backtony.github.io/assets/img/post/spring/test/3-15.PNG)  
 이제 빌드를 해주면 위와 같이 조각이 만들어진 것을 확인할 수 있습니다.  
-attributes(key("title").value("memberStatus")) 이 코드로 인해 상단에 memberStatus라는 문자가 들어가게 됩니다.  
+custom-response-fields-memberStatus.adoc 파일을 보시면 attributes(key("title").value("memberStatus")) 코드로 인해 문서 상단에 memberStatus라는 문자가 들어가게 됩니다.  
 <br>
 
 여기까지 enum 문서화를 끝냈습니다.  
 하지만 만들어진 조각을 바탕으로 문서화하면 매우 번거롭습니다. 일단 간단하게 문서화를 해놓고 보겠습니다.
 ![그림16](https://backtony.github.io/assets/img/post/spring/test/3-16.PNG)  
 표에는 MemberStatus 코드를 참고하여 값을 확인하라고 적혀있습니다.  
-그럼 왼쪽 목록에서 해당 링크를 타고 가서 확인해야 합니다. 만약 링크를 타고 이동해서 확인하고 원래 보던 곳으로 다시 되돌아가려면 지점을 찾기가 힘듭니다.  
+그럼 왼쪽 목록에서 해당 링크를 타고 가서 확인해야 합니다. 만약 링크를 타고 이동해서 확인하고 원래 보던 곳으로 다시 되돌아가려면 전에 보고 있던 문서의 지점을 찾기가 어렵습니다.  
 따라서 표 안에서 클릭으로 팝업창을 띄울 수 있다면 훨씬 편하게 문서를 확인할 수 있을 것입니다.  
 <br>
 
@@ -859,11 +876,11 @@ class MemberControllerTest extends RestDocsTestSupport {
     ...
 }
 ```
-role은 doc파일을 생성하면 class가 됩니다.
+달라진 점은 fieldWithPath의 description 쪽입니다.  
+role은 doc파일을 생성하면 class가 됩니다. HTML로 변환시 아래와 같이 변환됩니다.
 ```html
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="common/member-status.html" class="popup">상태 코드</a></p></td>
 ```
-이런 식으로 변환됩니다.  
 <br><br>
 
 ![그림18](https://backtony.github.io/assets/img/post/spring/test/3-18.PNG)  
@@ -1086,8 +1103,7 @@ include::Member-API.adoc[]
 
 <br><Br><br>
 
-
 __참고 자료__  
-[[https://techblog.woowahan.com/2678/](https://techblog.woowahan.com/2678/)]  
-[[https://techblog.woowahan.com/2597/](https://techblog.woowahan.com/2597/)]  
-[[https://docs.spring.io/spring-restdocs/docs/current/reference/html5/](https://docs.spring.io/spring-restdocs/docs/current/reference/html5/)]  
+[[https://techblog.woowahan.com/2678/](https://techblog.woowahan.com/2678/){: target="_blank"}]  
+[[https://techblog.woowahan.com/2597/](https://techblog.woowahan.com/2597/){: target="_blank"}]  
+[[https://docs.spring.io/spring-restdocs/docs/current/reference/html5/](https://docs.spring.io/spring-restdocs/docs/current/reference/html5/){: target="_blank"}]  
