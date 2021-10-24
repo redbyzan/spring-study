@@ -125,6 +125,9 @@ nohup java -jar -Dpinpoint.zookeeper.address=localhost pinpoint-web-boot-2.2.2.j
 
 # 4. Pinpoint Agent EC2 구성하기
 ---
+이제 spring boot가 실행될 EC2로 넘어와서 진행합니다.  
+<br>
+
 ## Pinpoint Agent 설치
 ```sh
 # agent 설치
@@ -166,7 +169,10 @@ docker ps 시 Permission Denied가 발생할 경우 아래 명령어 입력할 �
 sudo chmod 666 /var/run/docker.sock
 ```
 
-# 5. local환경에서 Spring boot의 Dockerfile 작성
+# 5. Spring boot의 Dockerfile 작성
+---
+이제는 로컬 환경에서 개발중인 스프링 부트의 도커파일을 작성하겠습니다.  
+
 ```dockerfile
 FROM openjdk:11-jdk
 
@@ -231,5 +237,6 @@ Pinpoint EC2:8080 으로 접속해보시면 이렇게 잘 세팅된 것을 확�
 
 __참고 자료__  
 [[https://jojoldu.tistory.com/573](https://jojoldu.tistory.com/573)]   
+
 
 
