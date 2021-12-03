@@ -1,11 +1,14 @@
+
+
+
 ## 1. 타임리프를 사용하는 이유
 ---
-순수 HTML 파일을 웹 브라우저에서 열어도 내용 확인 가능하며, 서버를 통해 뷰 템플릿을 거치면 동적으로 변경된 결과 확인 가능하기 때문에 사용한다. 이렇게 순수 HTML을 그대로 유지하면서 뷰 템플릿도 사용할 수 있는 타임리프의 특징을 네츄럴 템플릿 이라 합니다.
+순수 HTML 파일을 웹 브라우저에서 열어도 내용 확인 가능하며, 서버를 통해 뷰 템플릿을 거치면 동적으로 변경된 결과 확인 가능하기 때문에 사용합니다. 이렇게 순수 HTML을 그대로 유지하면서 뷰 템플릿도 사용할 수 있는 타임리프의 특징을 네츄럴 템플릿 이라 합니다.
 <br>
 
 ## 2. 타임리프 핵심
 ---
-th:xxx 가 붙은 부분은 서버사이드에서 렌더링 되고, 기존의 것을 대체한다. th:xxx 이 없으면 기존 html 속성이 적용됩니다.
+th:xxx 가 붙은 부분은 서버사이드에서 렌더링 되고, 기존의 것을 대체합니다. th:xxx 이 없으면 기존 html 속성이 적용됩니다.
 <br>
 
 ## 3. 문법
@@ -33,7 +36,7 @@ Hello Spring
 두 번째 줄의 [[]] 문법을 사용하면 그 안에 바로 데이터가 출력됩니다.
 
 ### 단순 출력하기 th:utext
-웹 브라우저는 < 를 HTML의 시작 태그로 인식한다. 따라서 < 를 태그의 시작이 아니라 문자로 표현할 방법이 필요한데, 이것을 __HTML 엔티티__ 라고 합니다.  
+웹 브라우저는 < 를 HTML의 시작 태그로 인식합니다. 따라서 < 를 태그의 시작이 아니라 문자로 표현할 방법이 필요한데, 이것을 __HTML 엔티티__ 라고 합니다.  
 HTML에서 사용하는 특수문자를 HTML 엔티티로 변경하는 것을 __이스케이프__ 라고 합니다.  
 기본적으로 타임리프가 제공하는 th:text와 [[]]는 기본적으로 이스케이프를 제공합니다.  
 따라서 model에 <b\></b\> 와 같은 태그를 넣으면 태그가 적용되지 않고 <b\></b\>가 그대로 출력됩니다..  
@@ -57,10 +60,10 @@ th:utext = Hello Spring <!-- spring 글씨가 굵게 출력됨-->
 [[...]] = Hello <b>Spring</b>
 [(...)] = Hello Spring <!-- spring 글씨가 굵게 출력됨-->
 ```
-컨트롤러에서 model에 data키로 Hello <b\>Spring</b\> 을 넣었다고 가정한다.
+컨트롤러에서 model에 data키로 Hello <b\>Spring</b\> 을 넣었다고 가정합니다.
 
 ### 변수 - SpringEL
-타임리프에서 변수를 사용할 때는 변수 표현식을 사용한다.
+타임리프에서 변수를 사용할 때는 변수 표현식을 사용합니다.
 ```java
 @GetMapping("/variable")
 public String variable(Model model){
@@ -138,11 +141,11 @@ th:with는 지역 변수를 선언해서 사용할 수 있도록 하는 방식�
 그런데 #request 는 HttpServletRequest 객체가 그대로 제공되기 때문에 데이터를 조회하려면 request.getParameter("data") 처럼 불편하게 접근해야 합니다.  
 이를 간편하게 하기 위한 편의 객체도 제공합니다.
 + HTTP 요청 파라미터 접근 - param
-    - 요청에서 쿼리파라미터로 paramData=hello를 줬다면 ${param.paramData} 로 꺼내 사용할 수 있습니다.
+  - 요청에서 쿼리파라미터로 paramData=hello를 줬다면 ${param.paramData} 로 꺼내 사용할 수 있습니다.
 + HTTP 세션 접근 - session
-    - session에 seesionData로 값이 담겨있다면 ${session.sessionData} 로 꺼내 사용할 수 있습니다.
+  - session에 seesionData로 값이 담겨있다면 ${session.sessionData} 로 꺼내 사용할 수 있습니다.
 + 스프링 빈 접근 - @
-    - helloBean이라는 빈이 있고 그 안에 hello 메서드가 있다면 ${@helloBean.hello('Spring!')} 로 메서드 반환값을 사용할 수 있습니다.
+  - helloBean이라는 빈이 있고 그 안에 hello 메서드가 있다면 ${@helloBean.hello('Spring!')} 로 메서드 반환값을 사용할 수 있습니다.
 
 ```html
 <ul>
@@ -187,7 +190,7 @@ spring bean = Spring!
 + #lists , #sets , #maps : 컬렉션 관련 기능 제공
 + #ids : 아이디 처리 관련 기능 제공, 뒤에서 설명
 
-이에 관한 사용 방법으로는 [공식문서](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#appendix-b-expression- utility-objects){: target="_blank"}를 참고바랍니다.
+이에 관한 사용 방법으로는 [공식문서](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#appendix-b-expression- utility-objects)를 참고바랍니다.
 
 문서에 java 8 시간에 대한 부분만 예시가 없어서 이 부분만 예시를 작성하겠습니다.  
 model.addAttribute("localDateTime", LocalDateTime.now()); 이렇게 해주고 아래와 같이 사용합니다.
@@ -698,16 +701,16 @@ layoutFile.html 파일을 보면 레이아웃1과 마찬가지로 ${title}에 �
 <!DOCTYPE html>
 <html>
 <head>
-    <title>메인 페이지 타이틀</title>
+  <title>메인 페이지 타이틀</title>
 </head>
 <body>
 <h1>레이아웃 H1</h1>
 <section>
-    <p>메인 페이지 컨텐츠</p>
-    <div>메인 페이지 포함 내용</div>
+  <p>메인 페이지 컨텐츠</p>
+  <div>메인 페이지 포함 내용</div>
 </section>
 <footer>
-    레이아웃 푸터
+  레이아웃 푸터
 </footer>
 </body>
 </html>
@@ -716,4 +719,4 @@ layoutFile.html 파일을 보면 레이아웃1과 마찬가지로 ${title}에 �
 <br><br>
 
 ---
-__본 포스팅은 인프런 김영한님의 '스프링 MVC 2편 - 백엔드 웹 개발 활용 기술' 강의를 듣고 정리한 내용을 바탕으로 복습을 위해 작성하였습니다. [[강의 링크](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-mvc-2){:target="_blank"}]__
+__본 포스팅은 인프런 김영한님의 '스프링 MVC 2편 - 백엔드 웹 개발 활용 기술' 강의를 듣고 정리한 내용을 바탕으로 복습을 위해 작성하였습니다. [[강의 링크](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-mvc-2)]__
