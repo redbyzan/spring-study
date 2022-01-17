@@ -2,7 +2,10 @@ package com.example.mysqltest.db;
 
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -11,6 +14,7 @@ import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -21,20 +25,12 @@ import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
+// DataSource를 직접 설정해야하기 때문에 자동으로 DataSource를 연결하는 DataSourceAutoConfiguration 클래스를 제외
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 public class DbConfig {
 
     private final DbProperty dbProperty;
     private final JpaProperties jpaProperties;
-
-    // 바로 아래 routingDataSource 에서 사용할 메서드
-    public DataSource createDataSource(String url) {
-        HikariDataSource hikariDataSource = new HikariDataSource();
-        hikariDataSource.setJdbcUrl(url);
-        hikariDataSource.setDriverClassName(dbProperty.getDriverClassName());
-        hikariDataSource.setUsername(dbProperty.getUsername());
-        hikariDataSource.setPassword(dbProperty.getPassword());
-        return hikariDataSource;
-    }
 
     @Bean
     public DataSource routingDataSource() {
@@ -49,12 +45,21 @@ public class DbConfig {
             dataSourceMap.put(slave.getName(), createDataSource(slave.getUrl()));
         });
 
-        // ReplicationRoutingDataSource의 replicationRoutingDataSourceNameList 세팅 -> slave 키 이름 리스트 세팅
+        // TargetDataSources를 세팅하지만 앞서 재정의했듯이 해당 클래스가 Slave이름을 리스트로 갖는 변수를 세팅하는 코드가 있음
         replicationRoutingDataSource.setTargetDataSources(dataSourceMap);
 
         // 디폴트는 Master 로 설정
         replicationRoutingDataSource.setDefaultTargetDataSource(masterDataSource);
         return replicationRoutingDataSource;
+    }
+
+    public DataSource createDataSource(String url) {
+        HikariDataSource hikariDataSource = new HikariDataSource();
+        hikariDataSource.setJdbcUrl(url);
+        hikariDataSource.setDriverClassName(dbProperty.getDriverClassName());
+        hikariDataSource.setUsername(dbProperty.getUsername());
+        hikariDataSource.setPassword(dbProperty.getPassword());
+        return hikariDataSource;
     }
 
     @Bean
@@ -63,25 +68,19 @@ public class DbConfig {
         return new LazyConnectionDataSourceProxy(routingDataSource());
     }
 
-
     // JPA 에서 사용할 entityManager 설정
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-
-        entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
-        entityManagerFactoryBean.setDataSource(dataSource());
-        entityManagerFactoryBean.setPackagesToScan("com.example.mysqltest");
-
-        // 네이밍 전략 snake_case로 설정
-        Map<String, String> properties = jpaProperties.getProperties();
-        properties.put("hibernate.physical_naming_strategy", "org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy");
-
-        entityManagerFactoryBean.setJpaPropertyMap(properties);
-
-        return entityManagerFactoryBean;
+        EntityManagerFactoryBuilder entityManagerFactoryBuilder = createEntityManagerFactoryBuilder(jpaProperties);
+        return entityManagerFactoryBuilder.dataSource(dataSource()).packages("com.example.mysqltest").build();
     }
+
+    private EntityManagerFactoryBuilder createEntityManagerFactoryBuilder(JpaProperties jpaProperties) {
+        AbstractJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        // jpaProperties는 yml에 있는 jpaProperties를 의미
+        return new EntityManagerFactoryBuilder(vendorAdapter, jpaProperties.getProperties(), null);
+    }
+
 
     // JPA 에서 사용할 TransactionManager 설정
     @Bean

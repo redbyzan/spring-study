@@ -10,8 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@Table(name = "member")
-public class Member extends BaseEntity{
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +19,11 @@ public class Member extends BaseEntity{
     private String name;
 
     private int age;
+
+    public static Member of(String name, int age){
+        return Member.builder()
+                .name(name)
+                .age(age)
+                .build();
+    }
 }
