@@ -1,3 +1,4 @@
+
 # 1. DB Replication 이란?
 ---
 데이터베이스 이중화 방식 중 하나로 __하나의 Master DB와 여러대의 Slave DB를 구성하는 방식__ 을 의미합니다.
@@ -65,51 +66,43 @@ AZ 옵션을 활성화 시켜줍니다.
 + @Transactional(readOnly = true) 인 경우는 Slave DB 접근
 + @Transactional(readOnly = false) 인 경우에는 Master DB 접근
 
-## XXApplication
-```java
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-public class MysqltestApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(MysqltestApplication.class, args);
-    }
-}
-```
-DataSource를 직접 설정해야하기 때문에 Spring에서 DataSourceAutoConfiguration 클래스를 제외해야합니다.
-
-
 ## application.yml
 ```yml
 spring:
   datasource:
-    url: jdbc:mysql://test-master.cvowj9xkrrgz.ap-northeast-2.rds.amazonaws.com:3306/test?useSSL=false&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://master.chjqzcooytli.ap-northeast-2.rds.amazonaws.com:3306/test?useSSL=false&useUnicode=true&characterEncoding=utf8
     slave-list:
       - name: slave_1
-        url: jdbc:mysql://test-replica-1.cvowj9xkrrgz.ap-northeast-2.rds.amazonaws.com/test?useSSL=false&useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://slave-1.chjqzcooytli.ap-northeast-2.rds.amazonaws.com/test?useSSL=false&useUnicode=true&characterEncoding=utf8
       - name: slave_2
-        url: jdbc:mysql://test-replica-2.cvowj9xkrrgz.ap-northeast-2.rds.amazonaws.com/test?useSSL=false&useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://slave-2.chjqzcooytli.ap-northeast-2.rds.amazonaws.com/test?useSSL=false&useUnicode=true&characterEncoding=utf8
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: test
-    password: testtest
+    username: 비밀
+    password: 비밀
+
 
   jpa:
-    defer-datasource-initialization: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         format_sql: true
-    open-in-view: false
-    show-sql: true
+        hbm2ddl:
+          auto: create
+        physical_naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        defer-datasource-initialization: true
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        open-in-view: false
+        show-sql: true
+        generate-ddl: true
 
 logging:
   level:
-    com.zaxxer.hikari: INFO
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace 
 ```
 slave-list를 적어준 부분이고 이는 자동 설정이 아니며, 코드상에 사용할 값들입니다.  
 스프링 자동 설정을 제외하고 직접 세팅하는 작업을 진행하기 때문에 추가적인 작업들이 몇가지 필요합니다.  
+기존에는 yml에 세팅하면 자동으로 DataSource가 설정되면서 값들을 읽어갔지만 이제는 수동으로 해줘야하기 때문에 yml에 세팅한 값들이 먹히지 않습니다.  
+따라서 yml에 Jpa 세팅값을 읽는 JpaProperties 클래스를 사용하여 DataSource를 커스텀할 때 가져와서 사용해야 하므로 위와 같이 properties 안으로 세팅값을 몰아 넣습니다.  
 스프링 자동 설정 중 테이블 네이밍 설정이 빠져있기 때문에 테이블 네이밍 설정을 해줘야 합니다. 이 설정이 위의 naming 옵션입니다.  
 이외에는 기본적인 기본적인 MySQL DB 설정입니다.
 
@@ -158,6 +151,7 @@ public class ReplicationRoutingCircularList<T> {
 
 ## ReplicationRoutingDataSource.java
 ```java
+@Slf4j
 public class ReplicationRoutingDataSource extends AbstractRoutingDataSource {
 
     private ReplicationRoutingCircularList<String> replicationRoutingDataSourceNameList;
@@ -178,35 +172,32 @@ public class ReplicationRoutingDataSource extends AbstractRoutingDataSource {
     protected Object determineCurrentLookupKey() {
         boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
         if (isReadOnly) {
-            return replicationRoutingDataSourceNameList.getOne();
+            String slaveName = replicationRoutingDataSourceNameList.getOne();
+            log.info("Slave DB name : {}",slaveName); // 테스트에 찍어보기 위한 로그, 운영시 제거
+            return slaveName;
         }
+        log.info("master DB name : {}","master"); // 테스트에 찍어보기 위한 로그, 운영시 제거
         return "master";
     }
 }
 ```
-여러개의 DataSource를 묶고 필요에 따라 분기처리를 하기 위해 AbstractRoutingDataSource클래스를 사용합니다.  
-setTargetDataSources 에 의해서 모든 데이터소스는 부모 생성자에 넘기고, determineCurrentLookupKey에서 사용할 replicationRoutingDataSourceNameList 를 키가 slave를 포함하는 것들로 구성해 줍니다. (yml에서 작성한 slave-list의 name들이 들어가게 됩니다.)  
-determineCurrentLookupKey 메서드에서 현재 트랜잭션이 readOnly일 시 slave db의 키를, 아닐 시 master db의 DataSource의 키를 리턴하도록 작성해줍니다.
+여러개의 DataSource를 묶고 필요에 따라 분기처리를 하기 위해 AbstractRoutingDataSource클래스를 재정의해서 사용해야 합니다.  
+setTargetDataSources 에 의해서 모든 데이터소스는 부모 생성자에 넘기고, determineCurrentLookupKey 메서드에서 사용할 replicationRoutingDataSourceNameList 초기화 해줍니다.  
+이때 초기화 되는 값은 DataSource 이름 중에서 Slave가 들어간 것을 toString으로 이름만 빼서 리스트로 담아주는 작업입니다. (yml에서 작성한 slave-list의 name들이 들어가게 됩니다.)  
+determineCurrentLookupKey 메서드에서 현재 트랜잭션이 readOnly일 시 slave 데이터 소스 이름을, 아닐 시 master db의 DataSource의 이름을 리턴하도록 작성해줍니다.  
+이는 바로 아래 DbConfig를 보면 알겠지만 dataSource를 value를 저장하는 Map의 Key값이 데이터 소스 이름으로 등록하고 있기 때문입니다.
 
 ## DbConfig.java
 설정에 필요한 부가적인 것들은 모두 만들었으니 이제 최종적으로 이제 최종적으로 DataSource, TransactionManager, EntityManagerFactory를 설정해야합니다.
 ```java
 @Configuration
 @RequiredArgsConstructor
+// DataSource를 직접 설정해야하기 때문에 자동으로 DataSource를 연결하는 DataSourceAutoConfiguration 클래스를 제외
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class}) 
 public class DbConfig {
 
     private final DbProperty dbProperty;
     private final JpaProperties jpaProperties;
-
-    // 바로 아래 routingDataSource 에서 사용할 메서드
-    public DataSource createDataSource(String url) {
-        HikariDataSource hikariDataSource = new HikariDataSource();
-        hikariDataSource.setJdbcUrl(url);
-        hikariDataSource.setDriverClassName(dbProperty.getDriverClassName());
-        hikariDataSource.setUsername(dbProperty.getUsername());
-        hikariDataSource.setPassword(dbProperty.getPassword());
-        return hikariDataSource;
-    }
 
     @Bean
     public DataSource routingDataSource() {
@@ -221,12 +212,21 @@ public class DbConfig {
             dataSourceMap.put(slave.getName(), createDataSource(slave.getUrl()));
         });
 
-        // ReplicationRoutingDataSource의 replicationRoutingDataSourceNameList 세팅 -> slave 키 이름 리스트 세팅
+        // TargetDataSources를 세팅하지만 앞서 재정의했듯이 해당 클래스가 Slave이름을 리스트로 갖는 변수를 세팅하는 코드가 있음
         replicationRoutingDataSource.setTargetDataSources(dataSourceMap);
 
         // 디폴트는 Master 로 설정
         replicationRoutingDataSource.setDefaultTargetDataSource(masterDataSource);
         return replicationRoutingDataSource;
+    }
+
+    public DataSource createDataSource(String url) {
+        HikariDataSource hikariDataSource = new HikariDataSource();
+        hikariDataSource.setJdbcUrl(url);
+        hikariDataSource.setDriverClassName(dbProperty.getDriverClassName());
+        hikariDataSource.setUsername(dbProperty.getUsername());
+        hikariDataSource.setPassword(dbProperty.getPassword());
+        return hikariDataSource;
     }
 
     @Bean
@@ -235,25 +235,19 @@ public class DbConfig {
         return new LazyConnectionDataSourceProxy(routingDataSource());
     }
 
-
-     // JPA 에서 사용할 entityManager 설정
+    // JPA 에서 사용할 entityManager 설정
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-
-        entityManagerFactoryBean.setDataSource(dataSource());
-        entityManagerFactoryBean.setPackagesToScan("com.example.mysqltest");        
-        entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
-        
-        // 스프링 JPA를 사용하면 hibernate naming 전략이 snake case로 설정됩니다.
-        // 하지만 자동설정을 못하니 naming 전략이 camel case로 설정 되어 실행되므로 snake 전략으로 설정해 줍니다.
-        Map<String, String> properties = jpaProperties.getProperties();
-        properties.put("hibernate.physical_naming_strategy", "org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy");        
-        entityManagerFactoryBean.setJpaPropertyMap(properties);
-
-        return entityManagerFactoryBean;
+        EntityManagerFactoryBuilder entityManagerFactoryBuilder = createEntityManagerFactoryBuilder(jpaProperties);
+        return entityManagerFactoryBuilder.dataSource(dataSource()).packages("com.example.mysqltest").build();
     }
+
+    private EntityManagerFactoryBuilder createEntityManagerFactoryBuilder(JpaProperties jpaProperties) {
+        AbstractJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        // jpaProperties는 yml에 있는 jpaProperties를 의미
+        return new EntityManagerFactoryBuilder(vendorAdapter, jpaProperties.getProperties(), null);
+    }
+
 
     // JPA 에서 사용할 TransactionManager 설정
     @Bean
@@ -263,7 +257,7 @@ public class DbConfig {
         return tm;
     }
 
-    // jdbc Template 빈 등록
+    // jdbcTemplate 세팅
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
@@ -311,84 +305,54 @@ public interface MemberRepository extends JpaRepository<Member,Long> {}
 ```
 <Br>
 
-__MemberService.java__
+__MemberRepositoryTest.java__
 ```java
-@Service
-@Transactional
-@RequiredArgsConstructor
-public class MemberService {
+@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 데이터 소스 자동 연결 해제
+class MemberRepositoryTest {
 
-    private final MemberRepository memberRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
-    @Transactional(readOnly = true)
-    public void findMember(){
-        List<Member> all = memberRepository.findAll();
-        for (Member member : all) {
-            System.out.println("member = " + member);
-        }
-    }
-
-    public void saveMember(){
-        Member member = Member.builder()
-                .age(26)
-                .name("test")
-                .build();
+    @Test
+    @DisplayName("Save시 데이터 소스는 Master를 선택한다.")
+    void save_Member_Success() throws Exception{
+        //given
+        Member member = Member.of("backtony", 26);
         memberRepository.save(member);
     }
-}
-```
-<Br>
 
-__MemberController.java__
-```java
-@RestController
-@RequiredArgsConstructor
-public class MemberController {
+    @Test
+    @DisplayName("Slave DB에서 데이터를 조회한다 - 여러번 조회시 slave db 를 번갈아가면서 조회한다.")
+    void findMember_Success() throws Exception{
+        //given
+        int age = 27;
+        String name = "backtony";
+        Member save = memberRepository.save(Member.of(name, age));
 
-    private final MemberService memberService;
+        //when
+        Member member = memberRepository.findById(save.getId()).get();
+        Member member1 = memberRepository.findById(save.getId()).get();
+        Member member2 = memberRepository.findById(save.getId()).get();
+        Member member3 = memberRepository.findById(save.getId()).get();
 
-    @GetMapping("/save")
-    public void save(){
-        memberService.saveMember();
+        //then
+        Assertions.assertThat(member.getAge()).isEqualTo(age);
+        Assertions.assertThat(member.getName()).isEqualTo(name);
     }
 
-    @GetMapping("/find")
-    public void find(){
-        memberService.findMember();
-    }
 }
 ```
-<br>
-
-__DB 테이블 생성__
-```java
-CREATE TABLE `member` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `age` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-```
-직접 세팅해주었기 때문에 yml에 ddl 설정을 추가하여 동작하게 하는 방식도 따로 세팅해줘야 하는 것 같습니다. 이 부분에 대해서는 아직 부족해서 테이블을 직접 생성했습니다.  
-스프링에서 제공하는 자동 설정에 어떤 것들이 있는지는 org.springframework.boot.autoconfigure.orm.jpa 해당 패키지 아래 jpa, hibernate autoconfiguration에서 확인할 수 있습니다.  
-<br>
-
-AbstractRoutingDataSource 의 224번 줄에 있는 determineTargetDataSource 에 브레이크포인트를 찍어주고 디버그로 돌린 뒤 save와 find 요청을 보내보겠습니다.
-![그림9](https://backtony.github.io/assets/img/post/spring/mysql/1-9.PNG)  
-<Br>
-
-![그림10](https://backtony.github.io/assets/img/post/spring/mysql/1-10.PNG)
-
-save의 경우 master, find의 경우 replica가 오는 것을 확인할 수 있습니다.
+앞세 ReplicationRoutingDataSource클래스의 determineCurrentLookupKey메서드에서 datasource가 들어있는 Map의 키값을 반환할 때 로그로 찍도록 세팅해뒀기 때문에 해당 로그를 통해 적절한 DataSource로 나가는지 확인할 수 있습니다.
 
 
 
-<Br><Br>
+<Br><Br><Br>
 
 
-
-[[http://cloudrain21.com/mysql-replication](http://cloudrain21.com/mysql-replication){:target="_blank"}] 
-[[https://www.bespinglobal.com/techblog-rds-20180627/](https://www.bespinglobal.com/techblog-rds-20180627/){:target="_blank"}] 
-[[https://velog.io/@kingcjy/Spring-Boot-JPA-DB-Replication-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0](https://velog.io/@kingcjy/Spring-Boot-JPA-DB-Replication-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0){:target="_blank"}] 
-[[http://kwon37xi.egloos.com/m/5364167](http://kwon37xi.egloos.com/m/5364167){:target="_blank"}] 
-{:.note title="참고"}
+__참고__  
+[[http://cloudrain21.com/mysql-replication](http://cloudrain21.com/mysql-replication)]  
+[[https://www.bespinglobal.com/techblog-rds-20180627/](https://www.bespinglobal.com/techblog-rds-20180627/)]  
+[[https://velog.io/@kingcjy/Spring-Boot-JPA-DB-Replication-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0](https://velog.io/@kingcjy/Spring-Boot-JPA-DB-Replication-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0)]  
+[[http://kwon37xi.egloos.com/m/5364167](http://kwon37xi.egloos.com/m/5364167)]   
+[[https://tech.pick-git.com/db-replication/](https://tech.pick-git.com/db-replication/)]
