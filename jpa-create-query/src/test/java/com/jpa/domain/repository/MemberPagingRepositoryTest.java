@@ -30,7 +30,8 @@ class MemberPagingRepositoryTest {
 
     @BeforeEach
     void teardown() {
-        memberPagingRepository.deleteAll();
+        // deleteAll의 경우 쿼리가 여러번 나간다.
+        memberPagingRepository.deleteAllInBatch();
     }
 
     @Test

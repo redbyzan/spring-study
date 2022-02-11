@@ -24,11 +24,12 @@ class MemberRepositoryTest {
 
     @BeforeEach
     void teardown(){
-        memberRepository.deleteAll();
-        zoneRepository.deleteAll();
-        teamRepository.deleteAll();
-        categoryRepository.deleteAll();
-        memberCategoryRepository.deleteAll();
+        // deleteAll의 경우 쿼리가 여러번 나간다.
+        memberRepository.deleteAllInBatch();
+        zoneRepository.deleteAllInBatch();
+        teamRepository.deleteAllInBatch();
+        categoryRepository.deleteAllInBatch();
+        memberCategoryRepository.deleteAllInBatch();
     }
 
     @Test
