@@ -10,3 +10,4 @@ JPA 쿼리 생성의 다양한 방식을 정리한다.
     + 일대다 데이터 펌핑 제거
     + join fetch
 + 테스트 코드는 MemberRepositoryTest에서 확인하면 된다.    
++ HowToJpaIndex.class는 JPA 엔티티에서 인덱스 설정하는 방법 명시
