@@ -93,8 +93,9 @@ public class MemberPagingRepository {
      * Slice 방식의 경우 NoOffset으로 쿼리를 최적화할 수 있다.
      * offset이 존재하면 다 읽어놓고 필요한 것만 갖고 나머지는 버리고 사용하는 방식이다.
      * 인자로 마지막에 읽었던 member id를 받아서 where문의 조건으로 걸어 전에 읽었던 데이터는 걸러내버리고 이후부터 읽도록 한다.
-     * <p>
-     * 이는 전에 있던 데이터를 다 버리는 것이라 Slice가 아닌 Pagination 방식에서는 사용할 수 없다.
+     *
+     * 이는 전에 읽었었던 데이터는 제외하고 검색하기 때문에 페이지 위치를 알 수 없다.
+     * 따라서 Slice가 아닌 Pagination 방식에서는 사용할 수 없다.
      */
 
     public Slice<MemberDto> findSliceNoOffsetByName(Long lastMemberId, String name, Pageable pageable) {
