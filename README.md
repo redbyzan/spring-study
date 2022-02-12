@@ -1,7 +1,7 @@
 ## 소개
-공부용으로 작성한 코드, 블로그에서 작성한 코드들을 모아두는 저장소
+개인적으로 공부한 코드 또는 [블로그](https://backtony.github.io/)에 작성한 포스팅의 코드를 모아두는 저장소입니다.  
+각 폴더에 README를 통해 자세한 내용을 확인하실 수 있습니다.
 
-## 블로그 주소
-<a href="https://backtony.github.io/" target="_blank">링크</a>
+
 
 
