@@ -406,7 +406,7 @@ __logback-spring.xml 파일__
 
 이렇게 spring의 로그 설정을 알아보았습니다.  
 이전에 진행하던 프로젝트에서는 xml를 사용하기 싫어서 yml 파일에 간단하게 로그 설정을 집어넣고 사용하곤 했는데 아직까지는 상세한 설정을 하기 위해선 xml 설정방식을 사용해야하는 것 같습니다.  
-여기까지 글을 마치겠습니다. (__)
+여기까지 글을 마치겠습니다.  
 
 
 
@@ -417,7 +417,7 @@ __logback-spring.xml 파일__
 
 ---
 
-[[10분 테코톡] ☂️ 검프의 Logging(로깅) #1](https://www.youtube.com/watch?v=1MD5xbwznlI){: target="_blank"}]  
-[[10분 테코톡] ☂️ 검프의 Logging(로깅) #2](https://www.youtube.com/watch?v=JqZzy7RyudI){: target="_blank"}]  
-[Logback이란?](https://livenow14.tistory.com/64){: target="_blank"}]  
-{:.note title="참고"}
+[[10분 테코톡] ☂️ 검프의 Logging(로깅) #1](https://www.youtube.com/watch?v=1MD5xbwznlI)]  
+[[10분 테코톡] ☂️ 검프의 Logging(로깅) #2](https://www.youtube.com/watch?v=JqZzy7RyudI)]  
+[Logback이란?](https://livenow14.tistory.com/64)]  
+
