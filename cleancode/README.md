@@ -7,4 +7,4 @@
 https://land.seoul.go.kr:444/land/broker/brokerageCommission.do
 
 ## 책을 읽고 따로 정리한 포스팅
-[clean-code](https://github.com/backtony/clean-code)
+[clean-code](https://github.com/backtony/book/tree/master/clean-code#clean-code)
