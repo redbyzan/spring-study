@@ -26,8 +26,9 @@ spring:
               - profile_image
 
           kakao:
-            client-name: yours
+            client-name: kakao
             client-id: yours
+            client-secret: yours
             redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
             authorization-grant-type: authorization_code
             client-authentication-method: POST
