@@ -47,8 +47,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 UserDetails userDetails = customUserDetailsService.loadTokenUserByUsername(email,authProvider);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                // SecurityContextHolder.getContext().getAuthentication().getDetails();
-                // 저런식으로 꺼내쓰는거라는데 원하면 넣는거라는데 필요하지 않으면 지워도 된다.
+
+                // (WebAuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
+                // 저런식으로 꺼내쓰는거라는데 저기서는 ip 주소와 세션 ID를 얻을 수 있다.
+                // 필요 없다면 세팅하지 않아도 되지 않을까 싶다.
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
