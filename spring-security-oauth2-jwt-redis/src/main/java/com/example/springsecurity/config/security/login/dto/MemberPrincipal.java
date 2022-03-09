@@ -25,7 +25,7 @@ public class MemberPrincipal implements OAuth2User, UserDetails {
 
     public static MemberPrincipal of(Member member, Map<String, Object> attributes) {
         MemberPrincipal memberPrincipal = MemberPrincipal.from(member);
-        memberPrincipal.setAttributes(attributes);
+        memberPrincipal.attributes = attributes;
         return memberPrincipal;
     }
 
@@ -41,10 +41,6 @@ public class MemberPrincipal implements OAuth2User, UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(member.getRoleKey()));
-    }
-
-    public void setAttributes(Map<String, Object> attributes) {
-        this.attributes = attributes;
     }
 
     @Override
