@@ -1,6 +1,9 @@
 spring:
   profiles:
-    include: oauth
+    include:
+      - oauth
+      - jwt
+    active: dev
 
   h2:
     console:
@@ -15,10 +18,27 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-    properties: # property 사용 설정
-      hibernate: # hibernate property 설정
+    properties:
+      hibernate:
         format_sql: true
 
+
+
+server:
+  error:
+    include-stacktrace: never
+
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
   redis:
     lettuce:
       pool:
@@ -28,29 +48,3 @@ spring:
     port: 6379
     host: localhost
 
-
-
-
-# 로그 레벨 설정
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace # 실제 들어가는 파라미터값 찍어주는 설정
-    org.springframework.security.web: trace
-
-# sendError 했을 때 반환하는 필드 컨트롤
-# 실무에서는 exception, message, stacktrace, binding-errors를 반환하면 안되고 로그로 처리해야한다.
-# never 사용하지 않음
-# always 항상 사용
-# on_param 파라미터가 있을 때 사용
-server:
-  error:
-    include-stacktrace: never
-
-
-jwt:
-  secret-key: test
-  # 1시간
-  access-expiration-time: 3600000
-  # 24시간
-  refresh-expiration-time: 86400000
