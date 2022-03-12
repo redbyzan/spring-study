@@ -16,7 +16,7 @@ Content-Type: application/json
 ###
 
 # member 수정
-PUT {{host}}/api/members/1
+PATCH {{host}}/api/members/1
 Content-Type: application/json
 
 {
