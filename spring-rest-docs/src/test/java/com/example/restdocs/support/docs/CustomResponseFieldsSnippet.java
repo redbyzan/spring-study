@@ -1,4 +1,4 @@
-package com.example.restdocs.document.utils;
+package com.example.restdocs.support.docs;
 
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.operation.Operation;

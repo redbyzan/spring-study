@@ -1,4 +1,4 @@
-package com.example.restdocs.document.utils;
+package com.example.restdocs.support.docs;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

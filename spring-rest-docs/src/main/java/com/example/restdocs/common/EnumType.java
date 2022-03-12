@@ -1,4 +1,4 @@
-package com.example.restdocs;
+package com.example.restdocs.common;
 
 public interface EnumType {
     String getName();

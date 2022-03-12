@@ -1,9 +1,8 @@
-package com.example.restdocs;
+package com.example.restdocs.dummy;
 
-import com.example.restdocs.member.Member;
-import com.example.restdocs.member.MemberRepository;
-import com.example.restdocs.member.MemberStatus;
-import lombok.AllArgsConstructor;
+import com.example.restdocs.member.domain.Member;
+import com.example.restdocs.member.domain.MemberRepository;
+import com.example.restdocs.member.domain.MemberStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

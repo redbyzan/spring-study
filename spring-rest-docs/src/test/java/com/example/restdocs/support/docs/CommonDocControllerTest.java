@@ -1,7 +1,5 @@
-package com.example.restdocs.document;
+package com.example.restdocs.support.docs;
 
-import com.example.restdocs.document.utils.CustomResponseFieldsSnippet;
-import com.example.restdocs.document.utils.RestDocsTestSupport;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -40,9 +38,7 @@ class CommonDocControllerTest extends RestDocsTestSupport {
                         restDocs.document(
                                 responseFields(
                                         fieldWithPath("message").description("에러 메시지"),
-                                        fieldWithPath("status").description("Http Status Code"),
                                         fieldWithPath("code").description("Error Code"),
-                                        fieldWithPath("timestamp").description("에러 발생 시간"),
                                         fieldWithPath("errors").description("Error 값 배열 값"),
                                         fieldWithPath("errors[0].field").description("문제 있는 필드"),
                                         fieldWithPath("errors[0].value").description("문제가 있는 값"),

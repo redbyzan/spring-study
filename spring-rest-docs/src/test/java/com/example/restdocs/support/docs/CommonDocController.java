@@ -1,8 +1,8 @@
-package com.example.restdocs.document;
+package com.example.restdocs.support.docs;
 
-import com.example.restdocs.EnumType;
-import com.example.restdocs.member.MemberStatus;
-import com.example.restdocs.member.Sex;
+import com.example.restdocs.common.EnumType;
+import com.example.restdocs.member.domain.MemberStatus;
+import com.example.restdocs.member.domain.Sex;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

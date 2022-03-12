@@ -1,4 +1,4 @@
-package com.example.restdocs.document.utils;
+package com.example.restdocs.config;
 
 
 import org.springframework.boot.test.context.TestConfiguration;

@@ -1,9 +1,8 @@
-package com.example.restdocs.member;
+package com.example.restdocs.member.domain;
 
-import com.example.restdocs.EnumType;
+import com.example.restdocs.common.EnumType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @AllArgsConstructor
 @Getter

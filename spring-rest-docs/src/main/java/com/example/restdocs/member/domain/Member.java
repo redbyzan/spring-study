@@ -1,11 +1,10 @@
-package com.example.restdocs.member;
+package com.example.restdocs.member.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")

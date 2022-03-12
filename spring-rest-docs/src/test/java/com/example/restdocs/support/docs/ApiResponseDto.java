@@ -1,4 +1,4 @@
-package com.example.restdocs.document;
+package com.example.restdocs.support.docs;
 
 import lombok.*;
 

@@ -1,13 +1,11 @@
-package com.example.restdocs.member;
+package com.example.restdocs.member.presentation.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.aspectj.lang.annotation.AfterReturning;
 
 import javax.validation.constraints.Max;
-import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Builder

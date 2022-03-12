@@ -1,6 +1,10 @@
-package com.example.restdocs.member;
+package com.example.restdocs.member.presentation;
 
 
+import com.example.restdocs.member.presentation.dto.MemberModificationRequest;
+import com.example.restdocs.member.domain.MemberRepository;
+import com.example.restdocs.member.presentation.dto.MemberResponse;
+import com.example.restdocs.member.presentation.dto.MemberSignUpRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +25,8 @@ public class MemberController {
 
     @GetMapping("/{id}")
     public MemberResponse getMember(@PathVariable Long id){
-
         return new MemberResponse(memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Not Found")));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다.")));
     }
 
     @PostMapping
@@ -31,17 +34,16 @@ public class MemberController {
         memberRepository.save(dto.toEntity());
     }
 
-    @PutMapping("/{id}")
-    public void modify(@PathVariable Long id
-            ,@RequestBody @Valid MemberModificationRequest dto){
-        Member member = memberRepository.findById(id).get();
-        member.modify(dto.getAge());
+    @PatchMapping("/{id}")
+    public void modify(@PathVariable Long id ,@RequestBody @Valid MemberModificationRequest dto){
+        memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."))
+                .modify(dto.getAge());
     }
 
     @GetMapping
     public Page<MemberResponse> getMembers(
-            @PageableDefault(sort = "id",direction = Sort.Direction.DESC)Pageable pageable
-            ){
+            @PageableDefault(sort = "id",direction = Sort.Direction.DESC)Pageable pageable){
         return memberRepository.findAll(pageable).map(MemberResponse::new);
     }
 
