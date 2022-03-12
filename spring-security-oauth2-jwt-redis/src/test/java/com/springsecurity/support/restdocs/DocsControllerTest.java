@@ -1,9 +1,9 @@
 package com.springsecurity.support.restdocs;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springsecurity.common.exception.GlobalExceptionHandler;
 import com.springsecurity.config.RestDocsConfig;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

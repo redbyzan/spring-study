@@ -1,8 +1,8 @@
 package com.springsecurity.config.security.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springsecurity.authentication.application.TokenProvider;
 import com.springsecurity.authentication.presentation.dto.AuthResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;

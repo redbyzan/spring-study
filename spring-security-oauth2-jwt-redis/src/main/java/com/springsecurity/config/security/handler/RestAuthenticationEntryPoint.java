@@ -1,7 +1,7 @@
 package com.springsecurity.config.security.handler;
 
-import com.springsecurity.config.security.SendErrorUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springsecurity.config.security.SendErrorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;

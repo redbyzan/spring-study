@@ -1,6 +1,5 @@
 package com.springsecurity.config.security.dto;
 
-import com.springsecurity.user.domain.AuthProvider;
 import com.springsecurity.user.domain.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,8 +15,8 @@ public class UserPrincipal implements OAuth2User {
     private User user;
     private Map<String, Object> attributes;
 
-    private UserPrincipal(User member) {
-        this.user = member;
+    private UserPrincipal(User user) {
+        this.user = user;
     }
 
     public static UserPrincipal from(User user) {
@@ -49,13 +48,5 @@ public class UserPrincipal implements OAuth2User {
     public String getUsername() {
         return user.getEmail();
     }
-
-
-    public AuthProvider getAuthProvider(){
-        return user.getAuthProvider();
-    }
-
-
-
 
 }

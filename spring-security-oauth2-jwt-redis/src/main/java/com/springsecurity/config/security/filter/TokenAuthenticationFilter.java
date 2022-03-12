@@ -26,7 +26,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private final String AUTHORIZATION_HEADER = "Authorization";
 
     private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
