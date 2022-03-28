@@ -14,22 +14,22 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DiseaseCSVRequestDto {
 
-    @CsvBindByPosition(position = 0)
+    @CsvBindByPosition(position = 0, required = true)
     private String name;
 
-    @CsvBindByPosition(position = 1)
+    @CsvBindByPosition(position = 1, required = true)
     private String definition;
 
-    @CsvBindByPosition(position = 2)
+    @CsvBindByPosition(position = 2, required = true)
     private String recommendDepartment;
 
-    @CsvBindByPosition(position = 3)
+    @CsvBindByPosition(position = 3, required = true)
     private String symptom;
 
-    @CsvBindByPosition(position = 4)
+    @CsvBindByPosition(position = 4, required = true)
     private String cause;
 
-    @CsvBindByPosition(position = 5)
+    @CsvBindByPosition(position = 5, required = true)
     private String hospitalCare;
 
     public Disease toDisease(){

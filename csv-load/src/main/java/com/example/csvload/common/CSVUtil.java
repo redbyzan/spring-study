@@ -1,4 +1,4 @@
-package com.example.csvload.disease.presentation;
+package com.example.csvload.common;
 
 import com.example.csvload.disease.dto.DiseaseCSVRequestDto;
 import com.example.csvload.exception.disease.FileReadException;
@@ -16,7 +16,7 @@ public class CSVUtil {
 
     private static final String TYPE = "text/csv";
 
-    static List<DiseaseCSVRequestDto> toDiseaseCSVRequestDto(MultipartFile file) {
+    public static List<DiseaseCSVRequestDto> toDiseaseCSVRequestDto(MultipartFile file) {
         CheckIsCSVFile(file);
         try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             return new CsvToBeanBuilder<DiseaseCSVRequestDto>(reader)
